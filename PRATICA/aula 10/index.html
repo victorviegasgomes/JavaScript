@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #area{
+            background-color: lightgreen;
+            color: white;
+            width: 200px;
+            height: 200px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <title>aula 10</title>
+</head>
+<body>
+    <div id="area" onmouseenter="entrar()" onmouseout="sair()">
+        interaja
+    </div>
+
+    <script>
+        var a = window.document.getElementById('area')
+        a.addEventListener('click',clicar)
+        function clicar(){
+            area.innerText = 'clicou'
+            area.style.backgroundColor = 'red'
+        }
+        function entrar(){
+            var area = window.document.getElementById('area')
+            area.innerText = 'entrou'
+        }
+        function sair(){
+            var area = window.document.getElementById('area')
+            area.innerText = 'saiu'
+            area.style.backgroundColor = 'lightgreen'
+        }
+    </script>
+</body>
+</html>

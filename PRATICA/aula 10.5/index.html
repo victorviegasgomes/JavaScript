@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <title>aula 10.5</title>
+</head>
+<body>
+    <h1>somando dois valores</h1>
+    
+    <input type="number" name="nome" id="primeiro">
+    <input type="number" name="nome" id="segundo">
+    <input type="button" value="somar" onclick="somar()">
+
+    <p id="resultado"></p>
+
+    <script>
+        function somar(){
+            var a = window.document.getElementById('primeiro')
+            var b = window.document.getElementById('segundo')
+
+            var res = window.document.getElementById('resultado')
+            var valora = Number(a.value)
+            var valorb = Number(b.value)
+
+            var resultado = valora + valorb
+
+            res.innerHTML = `a soma entre ${valora} e ${valorb} é igual a: <strong>${resultado}</strong>`
+        }
+    </script>
+</body>
+</html>
