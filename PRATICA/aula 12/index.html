@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aula 12</title>
+</head>
+<body>
+    <h1>função date e switch</h1>
+    <p>digite um numero de 0 à 6</p>
+    <input type="number" name="nome" id="numero">
+
+    <p id="data"></p>
+
+    <script>
+        var dataActual = document.getElementById('data')
+        var data = new Date()
+
+        dataActual.innerHTML = `fuso horário do cliente: ${data}`
+    </script>
+</body>
+</html>
