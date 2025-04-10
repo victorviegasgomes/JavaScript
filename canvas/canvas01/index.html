@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/index.css">
+  <!--<script src="js/index.js"></script>-->
+  <title>canvas01</title>
+</head>
+<body>
+	<h1>primeiro canvas</h1>
+	<canvas id="canvas1" width="400px" height="400px">
+	  <h1>trabalhando com canvas</h1>
+	  <p>esta mensagem só vai ser mostrada se seu navegador não for compatível com canvas</p>
+	</canvas>
+	
+	<script type="text/javascript">
+  	let can = document.getElementById("canvas1")
+    let contexto = can.getContext('2d')
+    contexto.fillStyle = "#00f"
+    contexto.fillRect(0,0,50,50)
+    
+    contexto.fillStyle = "rgba(255, 0, 0, 0.5)"
+    contexto.fillRect(25, 25, 50, 50)
+	</script>
+</body>
+</html>

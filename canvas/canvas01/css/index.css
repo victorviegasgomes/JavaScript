@@ -1,0 +1,17 @@
+/** {
+  margin: 0px;
+  padding: 0px;
+}
+
+canvas#canvas1 {
+  width: 400px;
+  height: 400px;
+  border: 1px solid #000;
+}
+*/
+canvas#canvas1 {
+  border: 1px solid #000;
+}
+/*
+  as propriedades width e height devem ser usadas directo no canvas para evitar conflitos e problenas nos desenhos
+*/

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressionar e Manter em Dispositivos Móveis</title>
+</head>
+<body>
+    <button id="btn">Toque e mantenha pressionado!</button>
+
+    <script>
+        const btn = document.getElementById('btn');
+        let interval;
+        // Evento 'touchstart' para iniciar a ação contínua ao tocar na tela
+        btn.addEventListener('touchstart', function() {
+            console.log("Tela tocada! Iniciando ação contínua...");
+
+            interval = setInterval(function() {
+                console.log("Ação contínua enquanto o toque está mantido.");
+            }, 100); // Ação repetida a cada 100ms
+        });
+
+        // Evento 'touchend' para parar a ação quando o toque é liberado
+        btn.addEventListener('touchend', function() {
+            clearInterval(interval); // Para a ação contínua
+            console.log("Toque liberado! Ação interrompida.");
+        });
+
+        // Se o dedo sair da tela (ou seja, o toque é removido de dentro do botão)
+        btn.addEventListener('touchcancel', function() {
+            clearInterval(interval); // Para a ação contínua
+            console.log("Toque cancelado! Ação interrompida.");
+        });
+    </script>
+</body>
+</html>
