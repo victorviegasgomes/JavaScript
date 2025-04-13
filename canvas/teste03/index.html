@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Movendo Quadrado com Botões e Teclado</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .controles {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .controles button {
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="300"></canvas>
+
+<div class="controles">
+  <button onclick="mover('up')">⬆️</button>
+  <button onclick="mover('left')">⬅️</button>
+  <button onclick="mover('down')">⬇️</button>
+  <button onclick="mover('right')">➡️</button>
+</div>
+
+<script>
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const quadrado = {
+    x: 150,
+    y: 100,
+    tamanho: 50,
+    cor: "blue"
+  };
+
+  const passo = 10;
+
+  function desenhar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = quadrado.cor;
+    ctx.fillRect(quadrado.x, quadrado.y, quadrado.tamanho, quadrado.tamanho);
+  }
+
+  function mover(direcao) {
+    if (direcao === "up") quadrado.y -= passo;
+    if (direcao === "down") quadrado.y += passo;
+    if (direcao === "left") quadrado.x -= passo;
+    if (direcao === "right") quadrado.x += passo;
+    desenhar();
+  }
+
+  // Movimento com teclado (desktop)
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp") mover("up");
+    if (e.key === "ArrowDown") mover("down");
+    if (e.key === "ArrowLeft") mover("left");
+    if (e.key === "ArrowRight") mover("right");
+  });
+
+  // Inicializa
+  desenhar();
+</script>
+
+</body>
+</html>

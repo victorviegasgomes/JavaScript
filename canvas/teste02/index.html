@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Movendo Quadrado no Canvas</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+      touch-action: none; /* Previne scroll e zoom */
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="300"></canvas>
+
+<script>
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  let quadrado = {
+    x: 100,
+    y: 100,
+    tamanho: 80,
+    cor: "blue"
+  };
+
+  let arrastando = false;
+  let offsetX, offsetY;
+
+  function desenhar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = quadrado.cor;
+    ctx.fillRect(quadrado.x, quadrado.y, quadrado.tamanho, quadrado.tamanho);
+  }
+
+  function dentroDoQuadrado(x, y) {
+    return (
+      x >= quadrado.x &&
+      x <= quadrado.x + quadrado.tamanho &&
+      y >= quadrado.y &&
+      y <= quadrado.y + quadrado.tamanho
+    );
+  }
+
+  function pegarCoordenadas(e) {
+    const rect = canvas.getBoundingClientRect();
+    if (e.touches) {
+        return {
+        x: e.touches[0].clientX - rect.left,
+        y: e.touches[0].clientY - rect.top
+      };
+    } else {
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+  }
+
+  function iniciarArraste(e) {
+    e.preventDefault();
+    const { x, y } = pegarCoordenadas(e);
+    if (dentroDoQuadrado(x, y)) {
+      arrastando = true;
+      offsetX = x - quadrado.x;
+      offsetY = y - quadrado.y;
+    }
+  }
+
+  function moverQuadrado(e) {
+    if (!arrastando) return;
+    e.preventDefault();
+    const { x, y } = pegarCoordenadas(e);
+    quadrado.x = x - offsetX;
+    quadrado.y = y - offsetY;
+    desenhar();
+  }
+
+  function pararArraste() {
+    arrastando = false;
+  }
+
+  // Eventos de mouse
+  canvas.addEventListener("mousedown", iniciarArraste);
+  canvas.addEventListener("mousemove", moverQuadrado);
+  canvas.addEventListener("mouseup", pararArraste);
+  canvas.addEventListener("mouseleave", pararArraste);
+
+  // Eventos de toque
+  canvas.addEventListener("touchstart", iniciarArraste);
+  canvas.addEventListener("touchmove", moverQuadrado);
+  canvas.addEventListener("touchend", pararArraste);
+  canvas.addEventListener("touchcancel", pararArraste);
+
+  // Inicializa desenho
+  desenhar();
+</script>
+
+</body>
+</html>

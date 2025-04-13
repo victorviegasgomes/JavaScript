@@ -1,0 +1,17 @@
+canvas {
+  border: 1px solid #000;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.controles {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.controles button {
+  padding: 10px 20px;
+  font-size: 18px;
+}

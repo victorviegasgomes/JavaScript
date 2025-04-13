@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Movendo imagem com canvas</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+      touch-action: none; /* Evita zoom e scroll ao tocar */
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="meuCanvas" width="400" height="300"></canvas>
+
+<script>
+  const canvas = document.getElementById('meuCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const imagem = new Image();
+  imagem.src = 'personagem.png';
+  let imgX = 0, imgY = 0;
+  let arrastando = false;
+  let offsetX = 0, offsetY = 0;
+
+  imagem.onload = () => {
+    ctx.drawImage(imagem, imgX, imgY);
+  };
+
+  function redesenhar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(imagem, imgX, imgY);
+  }
+
+  function isDentroImagem(x, y) {
+    return x >= imgX && x <= imgX + imagem.width &&
+           y >= imgY && y <= imgY + imagem.height;
+  }
+
+  function pegarCoordenadas(e) {
+    if (e.touches) {
+      return {
+        x: e.touches[0].clientX - canvas.getBoundingClientRect().left,
+        y: e.touches[0].clientY - canvas.getBoundingClientRect().top
+      };
+    } else {
+      return {
+        x: e.clientX - canvas.getBoundingClientRect().left,
+        y: e.clientY - canvas.getBoundingClientRect().top
+      };
+    }
+  }
+
+  function iniciarArraste(e) {
+    e.preventDefault();
+    const { x, y } = pegarCoordenadas(e);
+    if (isDentroImagem(x, y)) {
+      arrastando = true;
+      offsetX = x - imgX;
+      offsetY = y - imgY;
+    }
+  }
+
+  function moverImagem(e) {
+    if (!arrastando) return;
+    e.preventDefault();
+    const { x, y } = pegarCoordenadas(e);
+    imgX = x - offsetX;
+    imgY = y - offsetY;
+    redesenhar();
+  }
+
+  function pararArraste() {
+    arrastando = false;
+  }
+
+  // Eventos de mouse
+  canvas.addEventListener('mousedown', iniciarArraste);
+  canvas.addEventListener('mousemove', moverImagem);
+  canvas.addEventListener('mouseup', pararArraste);
+  canvas.addEventListener('mouseleave', pararArraste);
+
+  // Eventos de toque
+  canvas.addEventListener('touchstart', iniciarArraste);
+  canvas.addEventListener('touchmove', moverImagem);
+  canvas.addEventListener('touchend', pararArraste);
+  canvas.addEventListener('touchcancel', pararArraste);
+  </script>
+
+</body>
+</html>

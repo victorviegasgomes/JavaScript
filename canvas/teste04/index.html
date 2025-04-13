@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Movendo Quadrado Continuamente</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .controles {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .controles button {
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="300"></canvas>
+
+<div class="controles">
+  <button id="btn-up">⬆️</button>
+  <button id="btn-left">⬅️</button>
+  <button id="btn-down">⬇️</button>
+  <button id="btn-right">➡️</button>
+</div>
+
+<script>
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const quadrado = {
+    x: 150,
+    y: 100,
+    tamanho: 50,
+    cor: "blue"
+  };
+
+  const passo = 5;
+  let intervalo;
+
+  function desenhar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = quadrado.cor;
+    ctx.fillRect(quadrado.x, quadrado.y, quadrado.tamanho, quadrado.tamanho);
+  }
+
+  function mover(direcao) {
+    if (direcao === "up") quadrado.y -= passo;
+    if (direcao === "down") quadrado.y += passo;
+    if (direcao === "left") quadrado.x -= passo;
+    if (direcao === "right") quadrado.x += passo;
+    desenhar();
+  }
+
+  function iniciarMovimento(direcao) {
+    if (intervalo) clearInterval(intervalo);
+    mover(direcao); // move uma vez ao iniciar
+    intervalo = setInterval(() => mover(direcao), 50); // continua movendo
+  }
+
+  function pararMovimento() {
+    clearInterval(intervalo);
+    intervalo = null;
+  }
+
+  // Botões para mobile
+  document.getElementById("btn-up").addEventListener("touchstart", () => iniciarMovimento("up"));
+  document.getElementById("btn-left").addEventListener("touchstart", () => iniciarMovimento("left"));
+  document.getElementById("btn-down").addEventListener("touchstart", () => iniciarMovimento("down"));
+  document.getElementById("btn-right").addEventListener("touchstart", () => iniciarMovimento("right"));
+
+  ["btn-up", "btn-left", "btn-down", "btn-right"].forEach(id => {
+    const btn = document.getElementById(id);
+    btn.addEventListener("touchend", pararMovimento);
+    btn.addEventListener("touchcancel", pararMovimento);
+    btn.addEventListener("mousedown", () => iniciarMovimento(id.split("-")[1]));
+    btn.addEventListener("mouseup", pararMovimento);
+    btn.addEventListener("mouseleave", pararMovimento);
+  });
+
+  // Teclado para desktop
+  const teclasPressionadas = {};
+
+  window.addEventListener("keydown", (e) => {
+    if (teclasPressionadas[e.key]) return; // evita múltiplos intervalos
+    teclasPressionadas[e.key] = true;
+
+    if (e.key === "ArrowUp") iniciarMovimento("up");
+    if (e.key === "ArrowDown") iniciarMovimento("down");
+    if (e.key === "ArrowLeft") iniciarMovimento("left");
+    if (e.key === "ArrowRight") iniciarMovimento("right");
+  });
+
+  window.addEventListener("keyup", (e) => {
+    delete teclasPressionadas[e.key];
+    pararMovimento();
+  });
+
+  desenhar();
+</script>
+
+</body>
+</html>
