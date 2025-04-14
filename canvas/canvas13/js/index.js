@@ -20,16 +20,13 @@ const sprite = {
   velocidade: 2
 }
 
-function desenhar() {
   personagem.onload = () => {
-    reDesenhar()
     context.drawImage(personagem, sprite.cutX, sprite.cutY, sprite.cutWidth, sprite.cutHeight, sprite.x, sprite.y, sprite.width, sprite.height)
   }
-}
 
 function reDesenhar() {
   context.clearRect(0, 0, canvas.width, canvas.height)
-  //desenhar()
+  context.drawImage(personagem, sprite.cutX, sprite.cutY, sprite.cutWidth, sprite.cutHeight, sprite.x, sprite.y, sprite.width, sprite.height)
 }
 
 function actualizarPosicao() {
@@ -39,7 +36,7 @@ function actualizarPosicao() {
 
 function animacao() {
   actualizarPosicao()
-  desenhar()
+  reDesenhar()
   requestAnimationFrame(animacao)
 }
 
@@ -80,5 +77,4 @@ function parar() {
 })
 
 console.log(sprite.x)
-desenhar()
 requestAnimationFrame(animacao)
