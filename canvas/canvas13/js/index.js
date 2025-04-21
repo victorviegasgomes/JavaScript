@@ -1,80 +1,85 @@
-const canvas = document.getElementById("desenho")
+const canvas = document.getElementById("canvas")
 const context = canvas.getContext("2d")
 
 const personagem = new Image()
 personagem.src = "personagem.png"
 
-const spriteWidth = personagem.width / 4
-const spriteHeight = personagem.height / 4
-
-const sprite = {
+const jogador = {
   cutX: 0,
   cutY: 0,
-  cutWidth: spriteWidth,
-  cutHeight: spriteHeight,
-  x: 0,
-  y: 0,
-  width: 100,
-  height: 100,
-  direcao: {x: 0, y: 0},
-  velocidade: 2
+  x: 100,
+  y: 100,
+  width: 80,
+  height: 80,
+  velocidade: 4,
+  direcao: {x: 0,y: 0}
 }
 
-  personagem.onload = () => {
-    context.drawImage(personagem, sprite.cutX, sprite.cutY, sprite.cutWidth, sprite.cutHeight, sprite.x, sprite.y, sprite.width, sprite.height)
-  }
-
-function reDesenhar() {
+function desenhaPersonagem() {
+  const larg = personagem.width / 4
+  const alt = personagem.height /4
   context.clearRect(0, 0, canvas.width, canvas.height)
-  context.drawImage(personagem, sprite.cutX, sprite.cutY, sprite.cutWidth, sprite.cutHeight, sprite.x, sprite.y, sprite.width, sprite.height)
+  context.drawImage(personagem,
+  jogador.cutX,
+  jogador.cutY,
+  larg,
+  alt,
+  jogador.x,
+  jogador.y,
+  jogador.width,
+  jogador.height)
 }
 
 function actualizarPosicao() {
-  sprite.x += sprite.direcao.x * sprite.velocidade
-  sprite.y += sprite.direcao.y * sprite.velocidade
+  jogador.x += jogador.direcao.x * jogador.velocidade
+  jogador.y += jogador.direcao.y * jogador.velocidade
+  
+  if(jogador.x === canvas.width - jogador.width)
+    jogador.direcao.x = 0
+  if(jogador.x === 0)
+    jogador.direcao.x = 0
+  if(jogador.y === canvas.height - jogador.height)
+    jogador.direcao.y = 0
+  if(jogador.y === 0)
+    jogador.direcao.y = 0
 }
 
-function animacao() {
+function loop() {
   actualizarPosicao()
-  reDesenhar()
-  requestAnimationFrame(animacao)
+  desenhaPersonagem()
+  requestAnimationFrame(loop)
 }
 
 function mover(direcao) {
-  if(direcao === "up") {
-    sprite.direcao.x = 0 
-    sprite.direcao.y = -1
-  }
-  if(direcao === "down") {
-    sprite.direcao.x = 0 
-    sprite.direcao.y = 1
-  }
-  if(direcao === "left") {
-    sprite.direcao.x = -1
-    sprite.direcao.y = 0
-  }
-  if(direcao === "right") {
-    sprite.direcao.x = 1 
-    sprite.direcao.y = 0
-  }
+  if(direcao === "up")
+    jogador.direcao.y = -1
+  if(direcao === "down")
+    jogador.direcao.y = 1
+  if(direcao === "left")
+    jogador.direcao.x = -1
+  if(direcao === "right")
+    jogador.direcao.x = 1
+  
 }
 
 function parar() {
-  sprite.direcao.x = 0
-  sprite.direcao.y = 0
+  jogador.direcao.x = 0
+  jogador.direcao.y = 0
 }
 
 ["btn-up", "btn-down", "btn-left", "btn-right"].forEach(id => {
   const btn = document.getElementById(id)
   const direcao = id.split("-")[1]
   
-  btn.addEventListener("touchstart", (event) => {
-    event.preventDefault()
+  btn.addEventListener("touchstart", (evento) => {
+    evento.preventDefault()
     mover(direcao)
   })
   btn.addEventListener("touchend", parar)
   btn.addEventListener("touchcancel", parar)
 })
 
-console.log(sprite.x)
-requestAnimationFrame(animacao)
+personagem.onload = () => {
+  desenhaPersonagem()
+  requestAnimationFrame(loop)
+}

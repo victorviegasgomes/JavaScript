@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Canvas com Touch</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+      touch-action: none;
+    }
+    .controls {
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="300" height="300"></canvas>
+  <div class="controls">
+    <button id="left">Esquerda</button>
+    <button id="right">Direita</button>
+    <button id="up">Cima</button>
+    <button id="down">Baixo</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+    img.src = 'personagem.png'; // Substitua pela sua imagem
+
+    let x = 125;
+    let y = 125;
+    let moveX = 0;
+    let moveY = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, x, y, 50, 50);
+    }
+
+    function startMoving(dx, dy) {
+      moveX = dx;
+      moveY = dy;
+      moveImage();
+    }
+
+    function stopMoving() {
+      moveX = 0;
+      moveY = 0;
+    }
+
+    function moveImage() {
+      if (moveX !== 0 || moveY !== 0) {
+        x += moveX;
+        y += moveY;
+        draw();
+        requestAnimationFrame(moveImage);
+      }
+    }
+
+    img.onload = () => {
+      draw();
+    };
+
+    const controls = {
+      left: [-2, 0],
+      right: [2, 0],
+      up: [0, -2],
+      down: [0, 2],
+    };
+
+    for (const id in controls) {
+      const btn = document.getElementById(id);
+      const [dx, dy] = controls[id];
+
+      btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        startMoving(dx, dy);
+      });
+
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        stopMoving();
+      });
+    }
+  </script>
+</body>
+</html>

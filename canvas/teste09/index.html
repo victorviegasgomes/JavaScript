@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sprite Animada</title>
+  <style>
+    canvas {
+      background: #eee;
+      display: block;
+      margin: auto;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="256" height="256"></canvas>
+  <div class="controls">
+    <button id="left">⬅️</button>
+    <button id="up">⬆️</button>
+    <button id="down">⬇️</button>
+    <button id="right">➡️</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const sprite = new Image();
+    sprite.src = 'personagem.png'; // substitua pelo caminho da sua spritesheet 4x4
+    
+    const framewidth = 50;
+    const frameheight = 50;
+    
+    let posX = 96;
+    let posY = 96;
+    let direction = 0; // 0:down, 1:left, 2:right, 3:up
+    let frame = 0;
+    let moving = false;
+
+    const keys = {
+      left: false,
+      right: false,
+      up: false,
+      down: false
+    };
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const frameWidth = sprite.width/4;
+      const frameHeight = sprite.height/4;
+
+      if (moving) {
+        frame = (frame + 1) % 4;
+      } else {
+        frame = 0;
+      }
+
+      ctx.drawImage(
+        sprite,
+        frame * frameWidth,
+        direction * frameHeight,
+        frameWidth,
+        frameHeight,
+        posX,
+        posY,
+        framewidth,
+        frameheight
+      );
+    }
+
+    function updatePosition() {
+      if (keys.left) {
+        posX -= 2;
+        direction = 1;
+        moving = true;
+      } else if (keys.right) {
+        posX += 2;
+        direction = 2;
+        moving = true;
+      } else if (keys.up) {
+        posY -= 2;
+        direction = 3;
+        moving = true;
+      } else if (keys.down) {
+        posY += 2;
+        direction = 0;
+        moving = true;
+      } else {
+        moving = false;
+      }
+    }
+
+    function gameLoop() {
+      updatePosition();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    sprite.onload = () => {
+      gameLoop();
+    };
+
+    const setTouchControl = (btnId, dir) => {
+      const btn = document.getElementById(btnId);
+      btn.addEventListener('touchstart', () => keys[dir] = true);
+      btn.addEventListener('touchend', () => keys[dir] = false);
+    };
+
+    setTouchControl('left', 'left');
+    setTouchControl('right', 'right');
+    setTouchControl('up', 'up');
+    setTouchControl('down', 'down');
+  </script>
+</body>
+</html>
